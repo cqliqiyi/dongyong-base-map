@@ -371,10 +371,8 @@ const FALLBACK_DATA = [
 ];
 let BASE_DATA = FALLBACK_DATA; // 先用后备数据确保立即显示
 
-// COS部署地址（在线部署时从此加载）
-// 静态网站地址（优先）和原始 COS 地址（后备）
-const COS_DATA_URL = 'https://dongyong-wx-1417241299.cos-website.ap-chongqing.myqcloud.com/base-map/base_data.json';
-const COS_DATA_FALLBACK_URL = 'https://dongyong-wx-1417241299.cos.ap-chongqing.myqcloud.com/base-map/base_data.json';
+// 使用相对路径，兼容任何部署域名（GitHub Pages / COS / 本地）
+const COS_DATA_URL = './base_data.json';
 
 function loadOnlineData() {
     // 尝试通过fetch加载外部JSON（在线部署时使用）
@@ -394,22 +392,8 @@ function loadOnlineData() {
             }
         })
         .catch(err => {
-            console.log('静态网站地址加载失败，尝试原始COS地址...');
-            fetch(COS_DATA_FALLBACK_URL)
-                .then(res => res.ok ? res.json() : Promise.reject())
-                .then(data => {
-                    if (data && data.bases && data.bases.length > 0) {
-                        BASE_DATA = data.bases;
-                        if (data.updated) {
-                            document.getElementById('updateDate').textContent = '更新日期：' + data.updated;
-                        }
-                        buildDistrictOptions();
-                        renderBases();
-                    }
-                })
-                .catch(err2 => {
-                    console.log('在线数据未加载，使用内嵌后备数据 (' + BASE_DATA.length + ' 条)');
-                });
+            console.log('在线数据未加载，使用内嵌后备数据 (' + BASE_DATA.length + ' 条)');
+            // 后备数据已通过 FALLBACK_DATA 赋值，无需额外操作
         });
 }
 
