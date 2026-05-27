@@ -546,10 +546,10 @@ function showDetail(id) {
     if (b.desc) {
         bodyHtml += `<div class="modal-info" style="margin-top:12px;padding-top:12px;border-top:1px solid #eee;"><strong>📝 简介：</strong><br>${b.desc}</div>`;
     }
-    // 高德一键导航按钮
-    const searchKeyword = encodeURIComponent(b.name + ' ' + b.location);
-    bodyHtml += `<a class="nav-btn" href="https://uri.amap.com/marker?position=&name=${searchKeyword}&src=冬泳基地导航&callnative=1" target="_blank" rel="noopener">`;
-    bodyHtml += `🗺️ 高德地图 · 一键导航</a>`;
+    // 高德一键导航按钮（搜索模式，无需坐标即可导航）
+    const searchKeyword = encodeURIComponent(b.name);
+    bodyHtml += `<a class="nav-btn" href="https://uri.amap.com/search?key=${searchKeyword}&src=冬泳基地导航&callnative=1" target="_blank" rel="noopener">`;
+    bodyHtml += `🗺️ 高德地图 · 搜索并导航</a>`;
     document.getElementById("modalBody").innerHTML = bodyHtml;
 
     document.getElementById("modalOverlay").classList.add("show");
@@ -563,7 +563,8 @@ function closeModal(e) {
 // ==================== 高德一键导航 ====================
 function openAmap(keyword) {
     // 使用高德地图搜索API，打开高德App/网页导航
-    const url = 'https://uri.amap.com/search?key=' + keyword + '&src=冬泳基地导航&callnative=1';
+    // 编码关键词，支持中文名称
+    const url = 'https://uri.amap.com/search?key=' + encodeURIComponent(keyword) + '&src=冬泳基地导航&callnative=1';
     window.open(url, '_blank');
 }
 
