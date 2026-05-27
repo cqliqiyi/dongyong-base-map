@@ -328,46 +328,46 @@
 // ==================== 基地数据（完整后备数据 + 在线加载） ====================
 // 完整40条基地数据（内嵌后备，确保 file:// 协议下也能正常显示）
 const FALLBACK_DATA = [
-    { id: 1, name: "大鱼海棠分队基地", district: "南岸区", water: "river", icon: "🐟", time: "清晨 6:00-8:00", location: "南滨路大鱼海棠公园下方江段", desc: "南岸区君港水上救援队大鱼海棠分队驻地，夏季有义务巡防值守，南滨路沿线热门下水点。" },
-    { id: 2, name: "铜元局分队基地", district: "南岸区", water: "river", icon: "🌙", time: "清晨 6:00-8:00", location: "铜元局码头下游约200米", desc: "南岸区君港水上救援队铜元局分队驻地，江岸平缓，适合下水。" },
-    { id: 3, name: "海棠溪分队基地", district: "南岸区", water: "river", icon: "🌸", time: "清晨 6:00-8:00", location: "海棠溪江段（烟雨路下方）", desc: "南岸区君港水上救援队海棠溪分队驻地。" },
-    { id: 4, name: "长嘉汇分队基地", district: "南岸区", water: "river", icon: "🏛️", time: "清晨 6:00-8:00", location: "长嘉汇购物公园下方江段", desc: "南岸区君港水上救援队长嘉汇分队驻地，两江交汇处附近，可眺望朝天门。" },
-    { id: 5, name: "百步梯分队基地", district: "南岸区", water: "river", icon: "🪜", time: "清晨 6:00-8:00", location: "百步梯江段", desc: "南岸区君港水上救援队百步梯分队驻地。" },
-    { id: 6, name: "峡口分队基地", district: "南岸区", water: "river", icon: "🌉", time: "清晨 6:00-8:00", location: "峡口镇江段", desc: "南岸区君港水上救援队峡口分队驻地，位于南岸区下游。" },
-    { id: 7, name: "军港码头冬泳点", district: "南岸区", water: "river", icon: "⚓", time: "清晨 6:00-8:00", location: "南滨路军港码头", desc: "南滨路经典下水点，泳友聚集地。" },
-    { id: 8, name: "曾家岩大石头基地", district: "渝中区", water: "jialing", icon: "🪨", time: "清晨 6:00-9:00", location: "曾家岩大桥下方大石头处", desc: "嘉陵江沿岸经典冬泳点，大石头处为知名泳友聚集地。" },
-    { id: 9, name: "纱帽石冬泳基地", district: "渝中区", water: "jialing", icon: "🧢", time: "清晨 6:00-8:30", location: "嘉陵江牛角沱轻轨站下方", desc: "嘉陵江牛角沱段，纱帽石为标志性地标。" },
-    { id: 10, name: "鎏嘉码头冬泳队基地", district: "渝中区", water: "jialing", icon: "⚓", time: "清晨 6:00-8:30", location: "鎏嘉码头下方江段", desc: "嘉陵江鎏嘉码头段，泳友自发形成的水上活动点。" },
-    { id: 11, name: "大溪沟冬泳基地", district: "渝中区", water: "jialing", icon: "🏘️", time: "清晨 6:00-8:30", location: "大溪沟嘉陵江段", desc: "大溪沟嘉陵江畔，传统下水点之一。" },
-    { id: 12, name: "李子坝冬泳基地", district: "渝中区", water: "jialing", icon: "🚇", time: "清晨 6:00-9:00", location: "李子坝轻轨站下方江段", desc: "嘉陵江李子坝段，与网红轻轨穿楼同一江段。" },
-    { id: 13, name: "朝天门大剧院游泳点", district: "渝中区", water: "river", icon: "🎭", time: "清晨 6:00-8:00", location: "重庆大剧院下方江段", desc: "两江交汇处附近，长江与嘉陵江汇合点，江面开阔。" },
-    { id: 14, name: "石门冬泳跳水队基地", district: "江北区", water: "jialing", icon: "🏗️", time: "清晨 6:00-9:00", location: "石门大桥下方江段", desc: "石门大桥下游，以冬泳跳水为特色，嘉陵江经典下水点。" },
-    { id: 15, name: "鸭脚板冬泳基地", district: "江北区", water: "jialing", icon: "🦆", time: "清晨 6:00-8:30", location: "华新街嘉陵江大桥桥东", desc: "嘉陵江北岸知名冬泳点，泳友聚集地。" },
-    { id: 16, name: "刘家台冬泳基地", district: "江北区", water: "jialing", icon: "🏠", time: "清晨 6:00-8:30", location: "刘家台嘉陵江段", desc: "嘉陵江北岸刘家台，传统下水点。" },
-    { id: 17, name: "猫儿石冬泳队基地", district: "江北区", water: "jialing", icon: "🐱", time: "清晨 6:00-8:30", location: "北滨路猫儿石段", desc: "北滨路沿线猫儿石，北国风光河边冬泳点。" },
-    { id: 18, name: "郭家沱望江游泳基地", district: "江北区", water: "river", icon: "🌊", time: "清晨 6:00-8:00", location: "江北区郭家沱", desc: "长江郭家沱段，望江厂附近，长江下游方向经典下水点。" },
-    { id: 19, name: "鹅公岩回水沱冬泳场", district: "九龙坡区", water: "river", icon: "🦢", time: "清晨 6:00-8:00", location: "鹅公岩大桥附近回水沱", desc: "鹅公岩大桥下回水沱，长江南岸段，水流相对平缓。" },
-    { id: 20, name: "九龙滩冬泳基地", district: "九龙坡区", water: "river", icon: "🐉", time: "清晨 6:00-8:00", location: "杨家坪九龙滩", desc: "长江九龙坡段，九龙滩为传统冬泳点，泳友聚集。" },
-    { id: 21, name: "石门大桥沙坪坝侧基地", district: "沙坪坝区", water: "jialing", icon: "🌉", time: "清晨 6:00-9:00", location: "石门大桥沙坪坝侧下方江段", desc: "石门大桥嘉陵江南岸沙坪坝侧，与江北石门冬泳队隔江相望。" },
-    { id: 22, name: "正码头冬泳基地（碚石）", district: "北碚区", water: "jialing", icon: "⛵", time: "清晨 6:00-9:00", location: "北碚城区正码头碚石嘉陵江段", desc: "北碚区最经典的冬泳点，碚石为标志性下水位置，泳友众多。" },
-    { id: 23, name: "温塘峡冬泳基地", district: "北碚区", water: "jialing", icon: "♨️", time: "清晨 6:00-9:00", location: "北碚嘉陵江温塘峡四号门→野温泉", desc: "嘉陵江温塘峡段，下水后顺流可至野温泉，风景优美。" },
-    { id: 24, name: "义渡古镇冬泳基地", district: "大渡口区", water: "river", icon: "🌅", time: "清晨 6:00-8:00", location: "大渡口区义渡古镇下方江段", desc: "长江大渡口段，义渡古镇下方江面开阔，适合冬泳。" },
-    { id: 25, name: "巴南长江游泳点", district: "巴南区", water: "river", icon: "🌊", time: "清晨 6:00-8:00", location: "巴南区鱼洞长江段", desc: "长江巴南段，鱼洞附近下水点。" },
-    { id: 26, name: "文峰古街游泳点", district: "合川区", water: "jialing", icon: "🏛️", time: "清晨 6:00-8:30", location: "合川文峰古街嘉陵江段", desc: "合川文峰古街下方江段，三江交汇区域。" },
-    { id: 27, name: "东渡大桥游泳点", district: "合川区", water: "jialing", icon: "🌉", time: "清晨 6:00-8:30", location: "合川东渡大桥茶楼下方", desc: "东渡大桥下，合川泳友聚集地。" },
-    { id: 28, name: "涪江合川段游泳点", district: "合川区", water: "fujiang", icon: "🌅", time: "清晨 6:00-8:30", location: "合川涪江段（江润/南屏桥附近）", desc: "涪江合川段，江润、南屏桥加油站、八角亭、花滩等均有下水点。" },
-    { id: 29, name: "乌江游泳基地", district: "涪陵区", water: "wujiang", icon: "🌌", time: "清晨 6:00-9:00", location: "涪陵区乌江段（近长江交汇处）", desc: "涪陵乌江段经典冬泳基地，每日上百人下水，水质清澈。" },
-    { id: 30, name: "涪陵长江游泳点", district: "涪陵区", water: "river", icon: "🚢", time: "清晨 6:00-8:00", location: "涪陵城区长江段", desc: "长江涪陵段，两江交汇城市。" },
-    { id: 31, name: "武隆乌江冬泳基地", district: "武隆区", water: "wujiang", icon: "🏔️", time: "清晨 7:00-9:00", location: "武隆城区乌江段", desc: "武隆乌江段，固定冬泳群体超过500人。水质极佳，两岸山水如画。" },
-    { id: 32, name: "彭水乌江冬泳点", district: "彭水县", water: "wujiang", icon: "🎭", time: "清晨 7:00-9:00", location: "彭水县城乌江段", desc: "乌江彭水段，每年举办水上运动大赛，水质优良。" },
-    { id: 33, name: "龚滩古镇乌江游泳点", district: "酉阳县", water: "wujiang", icon: "🏘️", time: "清晨 7:00-9:00", location: "酉阳县龚滩古镇乌江段", desc: "乌江龚滩古镇段，古镇依山傍水，江水清澈，风景绝佳。" },
-    { id: 34, name: "潼南涪江冬泳基地", district: "潼南区", water: "fujiang", icon: "🌅", time: "清晨 6:30-9:00", location: "潼南涪江国家湿地公园段", desc: "涪江潼南段，涪江国家湿地公园下水点，潼南区游泳协会驻地。" },
-    { id: 35, name: "大佛寺涪江亲水点", district: "潼南区", water: "fujiang", icon: "🏯", time: "清晨 6:30-9:00", location: "潼南大佛寺涪江水域", desc: "潼南大佛寺下方涪江段。" },
-    { id: 36, name: "安居古城涪江冬泳点", district: "铜梁区", water: "fujiang", icon: "🏰", time: "清晨 6:30-9:00", location: "铜梁安居古城下方涪江段", desc: "涪江铜梁安居古城段，每年举办跨区域冬泳联谊活动。" },
-    { id: 37, name: "三峡之星体育馆码头", district: "万州区", water: "river", icon: "🏊", time: "清晨 6:00-8:00", location: "万州三峡之星体育馆下方长江段", desc: "长江万州段，三峡之星体育馆为标志性下水点。" },
-    { id: 38, name: "调节坝游泳基地", district: "开州区", water: "river", icon: "🌊", time: "清晨 6:00-8:00", location: "开州区调节坝", desc: "开州调节坝水域，开州区游泳爱好者聚集地。" },
-    { id: 39, name: "璧山区游泳协会基地", district: "璧山区", water: "river", icon: "🏞️", time: "清晨 6:30-8:30", location: "璧山区（水库/河流水域）", desc: "璧山区游泳协会驻地，包括王家沟水库等下水点。" },
-    { id: 40, name: "黔江弯塘冬泳基地", district: "黔江区", water: "river", icon: "🏞️", time: "清晨 7:00-9:00", location: "黔江区弯塘", desc: "黔江弯塘，渝东南泳友聚集地。" }
+    { id: 1, name: "大鱼海棠分队基地", district: "南岸区", water: "river", icon: "🐟", time: "清晨 6:00-8:00", location: "南滨路大鱼海棠公园下方江段", desc: "南岸区君港水上救援队大鱼海棠分队驻地，夏季有义务巡防值守，南滨路沿线热门下水点。", lat: 29.5543, lng: 106.5642 },
+    { id: 2, name: "铜元局分队基地", district: "南岸区", water: "river", icon: "🌙", time: "清晨 6:00-8:00", location: "铜元局码头下游约200米", desc: "南岸区君港水上救援队铜元局分队驻地，江岸平缓，适合下水。", lat: 29.5483, lng: 106.5496 },
+    { id: 3, name: "海棠溪分队基地", district: "南岸区", water: "river", icon: "🌸", time: "清晨 6:00-8:00", location: "海棠溪江段（烟雨路下方）", desc: "南岸区君港水上救援队海棠溪分队驻地。", lat: 29.5438, lng: 106.5751 },
+    { id: 4, name: "长嘉汇分队基地", district: "南岸区", water: "river", icon: "🏛️", time: "清晨 6:00-8:00", location: "长嘉汇购物公园下方江段", desc: "南岸区君港水上救援队长嘉汇分队驻地，两江交汇处附近，可眺望朝天门。", lat: 29.5721, lng: 106.5893 },
+    { id: 5, name: "百步梯分队基地", district: "南岸区", water: "river", icon: "🪜", time: "清晨 6:00-8:00", location: "百步梯江段", desc: "南岸区君港水上救援队百步梯分队驻地。", lat: 29.5658, lng: 106.5971 },
+    { id: 6, name: "峡口分队基地", district: "南岸区", water: "river", icon: "🌉", time: "清晨 6:00-8:00", location: "峡口镇江段", desc: "南岸区君港水上救援队峡口分队驻地，位于南岸区下游。", lat: 29.5963, lng: 106.6238 },
+    { id: 7, name: "军港码头冬泳点", district: "南岸区", water: "river", icon: "⚓", time: "清晨 6:00-8:00", location: "南滨路军港码头", desc: "南滨路经典下水点，泳友聚集地。", lat: 29.5521, lng: 106.5587 },
+    { id: 8, name: "曾家岩大石头基地", district: "渝中区", water: "jialing", icon: "🪨", time: "清晨 6:00-9:00", location: "曾家岩大桥下方大石头处", desc: "嘉陵江沿岸经典冬泳点，大石头处为知名泳友聚集地。", lat: 29.5672, lng: 106.5478 },
+    { id: 9, name: "纱帽石冬泳基地", district: "渝中区", water: "jialing", icon: "🧢", time: "清晨 6:00-8:30", location: "嘉陵江牛角沱轻轨站下方", desc: "嘉陵江牛角沱段，纱帽石为标志性地标。", lat: 29.5611, lng: 106.5325 },
+    { id: 10, name: "鎏嘉码头冬泳队基地", district: "渝中区", water: "jialing", icon: "⚓", time: "清晨 6:00-8:30", location: "鎏嘉码头下方江段", desc: "嘉陵江鎏嘉码头段，泳友自发形成的水上活动点。", lat: 29.5718, lng: 106.5576 },
+    { id: 11, name: "大溪沟冬泳基地", district: "渝中区", water: "jialing", icon: "🏘️", time: "清晨 6:00-8:30", location: "大溪沟嘉陵江段", desc: "大溪沟嘉陵江畔，传统下水点之一。", lat: 29.5695, lng: 106.5402 },
+    { id: 12, name: "李子坝冬泳基地", district: "渝中区", water: "jialing", icon: "🚇", time: "清晨 6:00-9:00", location: "李子坝轻轨站下方江段", desc: "嘉陵江李子坝段，与网红轻轨穿楼同一江段。", lat: 29.5578, lng: 106.5153 },
+    { id: 13, name: "朝天门大剧院游泳点", district: "渝中区", water: "river", icon: "🎭", time: "清晨 6:00-8:00", location: "重庆大剧院下方江段", desc: "两江交汇处附近，长江与嘉陵江汇合点，江面开阔。", lat: 29.5756, lng: 106.5952 },
+    { id: 14, name: "石门冬泳跳水队基地", district: "江北区", water: "jialing", icon: "🏗️", time: "清晨 6:00-9:00", location: "石门大桥下方江段", desc: "石门大桥下游，以冬泳跳水为特色，嘉陵江经典下水点。", lat: 29.5589, lng: 106.4758 },
+    { id: 15, name: "鸭脚板冬泳基地", district: "江北区", water: "jialing", icon: "🦆", time: "清晨 6:00-8:30", location: "华新街嘉陵江大桥桥东", desc: "嘉陵江北岸知名冬泳点，泳友聚集地。", lat: 29.5658, lng: 106.5342 },
+    { id: 16, name: "刘家台冬泳基地", district: "江北区", water: "jialing", icon: "🏠", time: "清晨 6:00-8:30", location: "刘家台嘉陵江段", desc: "嘉陵江北岸刘家台，传统下水点。", lat: 29.5703, lng: 106.5489 },
+    { id: 17, name: "猫儿石冬泳队基地", district: "江北区", water: "jialing", icon: "🐱", time: "清晨 6:00-8:30", location: "北滨路猫儿石段", desc: "北滨路沿线猫儿石，北国风光河边冬泳点。", lat: 29.5671, lng: 106.5123 },
+    { id: 18, name: "郭家沱望江游泳基地", district: "江北区", water: "river", icon: "🌊", time: "清晨 6:00-8:00", location: "江北区郭家沱", desc: "长江郭家沱段，望江厂附近，长江下游方向经典下水点。", lat: 29.6082, lng: 106.6741 },
+    { id: 19, name: "鹅公岩回水沱冬泳场", district: "九龙坡区", water: "river", icon: "🦢", time: "清晨 6:00-8:00", location: "鹅公岩大桥附近回水沱", desc: "鹅公岩大桥下回水沱，长江南岸段，水流相对平缓。", lat: 29.5312, lng: 106.5297 },
+    { id: 20, name: "九龙滩冬泳基地", district: "九龙坡区", water: "river", icon: "🐉", time: "清晨 6:00-8:00", location: "杨家坪九龙滩", desc: "长江九龙坡段，九龙滩为传统冬泳点，泳友聚集。", lat: 29.5103, lng: 106.5285 },
+    { id: 21, name: "石门大桥沙坪坝侧基地", district: "沙坪坝区", water: "jialing", icon: "🌉", time: "清晨 6:00-9:00", location: "石门大桥沙坪坝侧下方江段", desc: "石门大桥嘉陵江南岸沙坪坝侧，与江北石门冬泳队隔江相望。", lat: 29.5561, lng: 106.4775 },
+    { id: 22, name: "正码头冬泳基地（碚石）", district: "北碚区", water: "jialing", icon: "⛵", time: "清晨 6:00-9:00", location: "北碚城区正码头碚石嘉陵江段", desc: "北碚区最经典的冬泳点，碚石为标志性下水位置，泳友众多。", lat: 29.8052, lng: 106.4302 },
+    { id: 23, name: "温塘峡冬泳基地", district: "北碚区", water: "jialing", icon: "♨️", time: "清晨 6:00-9:00", location: "北碚嘉陵江温塘峡四号门→野温泉", desc: "嘉陵江温塘峡段，下水后顺流可至野温泉，风景优美。", lat: 29.8187, lng: 106.4181 },
+    { id: 24, name: "义渡古镇冬泳基地", district: "大渡口区", water: "river", icon: "🌅", time: "清晨 6:00-8:00", location: "大渡口区义渡古镇下方江段", desc: "长江大渡口段，义渡古镇下方江面开阔，适合冬泳。", lat: 29.4792, lng: 106.4816 },
+    { id: 25, name: "巴南长江游泳点", district: "巴南区", water: "river", icon: "🌊", time: "清晨 6:00-8:00", location: "巴南区鱼洞长江段", desc: "长江巴南段，鱼洞附近下水点。", lat: 29.3821, lng: 106.5183 },
+    { id: 26, name: "文峰古街游泳点", district: "合川区", water: "jialing", icon: "🏛️", time: "清晨 6:00-8:30", location: "合川文峰古街嘉陵江段", desc: "合川文峰古街下方江段，三江交汇区域。", lat: 29.9856, lng: 106.2837 },
+    { id: 27, name: "东渡大桥游泳点", district: "合川区", water: "jialing", icon: "🌉", time: "清晨 6:00-8:30", location: "合川东渡大桥茶楼下方", desc: "东渡大桥下，合川泳友聚集地。", lat: 29.9921, lng: 106.2754 },
+    { id: 28, name: "涪江合川段游泳点", district: "合川区", water: "fujiang", icon: "🌅", time: "清晨 6:00-8:30", location: "合川涪江段（江润/南屏桥附近）", desc: "涪江合川段，江润、南屏桥加油站、八角亭、花滩等均有下水点。", lat: 29.9783, lng: 106.2589 },
+    { id: 29, name: "乌江游泳基地", district: "涪陵区", water: "wujiang", icon: "🌌", time: "清晨 6:00-9:00", location: "涪陵区乌江段（近长江交汇处）", desc: "涪陵乌江段经典冬泳基地，每日上百人下水，水质清澈。", lat: 29.6982, lng: 107.4083 },
+    { id: 30, name: "涪陵长江游泳点", district: "涪陵区", water: "river", icon: "🚢", time: "清晨 6:00-8:00", location: "涪陵城区长江段", desc: "长江涪陵段，两江交汇城市。", lat: 29.7158, lng: 107.3865 },
+    { id: 31, name: "武隆乌江冬泳基地", district: "武隆区", water: "wujiang", icon: "🏔️", time: "清晨 7:00-9:00", location: "武隆城区乌江段", desc: "武隆乌江段，固定冬泳群体超过500人。水质极佳，两岸山水如画。", lat: 29.3292, lng: 107.7581 },
+    { id: 32, name: "彭水乌江冬泳点", district: "彭水县", water: "wujiang", icon: "🎭", time: "清晨 7:00-9:00", location: "彭水县城乌江段", desc: "乌江彭水段，每年举办水上运动大赛，水质优良。", lat: 29.2981, lng: 108.1427 },
+    { id: 33, name: "龚滩古镇乌江游泳点", district: "酉阳县", water: "wujiang", icon: "🏘️", time: "清晨 7:00-9:00", location: "酉阳县龚滩古镇乌江段", desc: "乌江龚滩古镇段，古镇依山傍水，江水清澈，风景绝佳。", lat: 28.8982, lng: 108.3568 },
+    { id: 34, name: "潼南涪江冬泳基地", district: "潼南区", water: "fujiang", icon: "🌅", time: "清晨 6:30-9:00", location: "潼南涪江国家湿地公园段", desc: "涪江潼南段，涪江国家湿地公园下水点，潼南区游泳协会驻地。", lat: 30.1723, lng: 105.8281 },
+    { id: 35, name: "大佛寺涪江亲水点", district: "潼南区", water: "fujiang", icon: "🏯", time: "清晨 6:30-9:00", location: "潼南大佛寺涪江水域", desc: "潼南大佛寺下方涪江段。", lat: 30.1681, lng: 105.8362 },
+    { id: 36, name: "安居古城涪江冬泳点", district: "铜梁区", water: "fujiang", icon: "🏰", time: "清晨 6:30-9:00", location: "铜梁安居古城下方涪江段", desc: "涪江铜梁安居古城段，每年举办跨区域冬泳联谊活动。", lat: 29.8726, lng: 106.1325 },
+    { id: 37, name: "三峡之星体育馆码头", district: "万州区", water: "river", icon: "🏊", time: "清晨 6:00-8:00", location: "万州三峡之星体育馆下方长江段", desc: "长江万州段，三峡之星体育馆为标志性下水点。", lat: 30.8038, lng: 108.3845 },
+    { id: 38, name: "调节坝游泳基地", district: "开州区", water: "river", icon: "🌊", time: "清晨 6:00-8:00", location: "开州区调节坝", desc: "开州调节坝水域，开州区游泳爱好者聚集地。", lat: 31.1427, lng: 108.4236 },
+    { id: 39, name: "璧山区游泳协会基地", district: "璧山区", water: "river", icon: "🏞️", time: "清晨 6:30-8:30", location: "璧山区（水库/河流水域）", desc: "璧山区游泳协会驻地，包括王家沟水库等下水点。", lat: 29.5923, lng: 106.2278 },
+    { id: 40, name: "黔江弯塘冬泳基地", district: "黔江区", water: "river", icon: "🏞️", time: "清晨 7:00-9:00", location: "黔江区弯塘", desc: "黔江弯塘，渝东南泳友聚集地。", lat: 29.5273, lng: 108.7681 }
 ];
 let BASE_DATA = FALLBACK_DATA; // 先用后备数据确保立即显示
 
@@ -517,7 +517,7 @@ function renderBases() {
             html += `</div>`;
             html += `<div class="base-location"><span class="loc-icon">📍</span>${b.location}</div>`;
             html += `</div>`;
-            html += `<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0;gap:4px;" onclick="event.stopPropagation();openAmap('${encodeURI(b.name + ' ' + b.location)}')">`;
+            html += `<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0;gap:4px;" onclick="event.stopPropagation();openAmap(${b.id})">`;
             html += `<div style="font-size:20px;">🗺️</div>`;
             html += `<div style="font-size:10px;color:#1677ff;font-weight:600;">导航</div>`;
             html += `</div>`;
@@ -546,10 +546,10 @@ function showDetail(id) {
     if (b.desc) {
         bodyHtml += `<div class="modal-info" style="margin-top:12px;padding-top:12px;border-top:1px solid #eee;"><strong>📝 简介：</strong><br>${b.desc}</div>`;
     }
-    // 高德一键导航按钮（搜索模式，无需坐标即可导航）
-    const searchKeyword = encodeURIComponent(b.name);
-    bodyHtml += `<a class="nav-btn" href="https://uri.amap.com/search?key=${searchKeyword}&src=冬泳基地导航&callnative=1" target="_blank" rel="noopener">`;
-    bodyHtml += `🗺️ 高德地图 · 搜索并导航</a>`;
+    // 高德一键导航按钮（坐标模式，精确跳转到导航路线）
+    const markerUrl = 'https://uri.amap.com/marker?position=' + b.lng + ',' + b.lat + '&name=' + encodeURIComponent(b.name) + '&src=冬泳基地导航&callnative=1';
+    bodyHtml += `<a class="nav-btn" href="${markerUrl}" target="_blank" rel="noopener">`;
+    bodyHtml += `🗺️ 高德地图 · 导航到此</a>`;
     document.getElementById("modalBody").innerHTML = bodyHtml;
 
     document.getElementById("modalOverlay").classList.add("show");
@@ -560,11 +560,12 @@ function closeModal(e) {
     document.getElementById("modalOverlay").classList.remove("show");
 }
 
-// ==================== 高德一键导航 ====================
-function openAmap(keyword) {
-    // 使用高德地图搜索API，打开高德App/网页导航
-    // 编码关键词，支持中文名称
-    const url = 'https://uri.amap.com/search?key=' + encodeURIComponent(keyword) + '&src=冬泳基地导航&callnative=1';
+// ==================== 高德一键导航（坐标模式） ====================
+function openAmap(id) {
+    // 使用高德地图marker API，根据经纬度精确标记位置
+    const b = BASE_DATA.find(item => item.id === id);
+    if (!b || !b.lat || !b.lng) return;
+    const url = 'https://uri.amap.com/marker?position=' + b.lng + ',' + b.lat + '&name=' + encodeURIComponent(b.name) + '&src=冬泳基地导航&callnative=1';
     window.open(url, '_blank');
 }
 
