@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>重庆冬泳基地导航</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: #f5f5f5;
+            max-width: 680px;
+            margin: 0 auto;
+            padding: 0 0 30px 0;
+            color: #333;
+        }
+        /* 头部 */
+        .header {
+            background: linear-gradient(135deg, #1a3a5c 0%, #2a5a8c 100%);
+            padding: 32px 20px 28px;
+            text-align: center;
+            color: #fff;
+        }
+        .header h1 { font-size: 24px; letter-spacing: 3px; font-weight: 700; margin-bottom: 6px; }
+        .header p { font-size: 13px; opacity: 0.8; letter-spacing: 1px; }
+        .header .count-badge {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            padding: 4px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            margin-top: 10px;
+        }
+        /* 搜索栏 */
+        .search-bar {
+            margin: -20px 16px 0;
+            background: #fff;
+            border-radius: 12px;
+            padding: 12px 16px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .search-bar input {
+            flex: 1;
+            border: none;
+            outline: none;
+            font-size: 15px;
+            color: #333;
+            background: transparent;
+        }
+        .search-bar input::placeholder { color: #bbb; }
+        .search-bar .search-icon { font-size: 18px; color: #999; }
+        /* 筛选标签 */
+        .filters {
+            display: flex;
+            gap: 8px;
+            padding: 14px 16px 8px;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        .filter-tag {
+            padding: 6px 18px;
+            border-radius: 20px;
+            font-size: 13px;
+            white-space: nowrap;
+            border: 1.5px solid #ddd;
+            background: #fff;
+            color: #666;
+            cursor: pointer;
+            transition: all 0.2s;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .filter-tag.active {
+            background: #1a3a5c;
+            border-color: #1a3a5c;
+            color: #fff;
+        }
+        /* 区域分组 */
+        .district-group { margin: 4px 16px 20px; }
+        .district-header {
+            display: flex;
+            align-items: baseline;
+            gap: 8px;
+            padding: 16px 0 8px;
+            border-bottom: 2px solid #1a3a5c;
+            margin-bottom: 10px;
+        }
+        .district-name { font-size: 18px; font-weight: 700; color: #1a3a5c; }
+        .district-meta { font-size: 12px; color: #999; }
+        /* 基地卡片 */
+        .base-card {
+            background: #fff;
+            border-radius: 10px;
+            padding: 14px 16px;
+            margin-bottom: 8px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            transition: transform 0.15s;
+            cursor: pointer;
+        }
+        .base-card:active { transform: scale(0.98); }
+        .base-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            flex-shrink: 0;
+        }
+        /* 水域颜色 */
+        .base-icon.river { background: #e1f5ee; }      /* 长江 - 绿色 */
+        .base-icon.jialing { background: #e6f1fb; }    /* 嘉陵江 - 蓝色 */
+        .base-icon.wujiang { background: #f0e6f6; }    /* 乌江 - 紫色 */
+        .base-icon.fujiang { background: #fef3d6; }    /* 涪江 - 橙色 */
+        .base-info { flex: 1; min-width: 0; }
+        .base-name { font-size: 15px; font-weight: 600; color: #222; margin-bottom: 2px; }
+        .base-tags {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin: 4px 0 3px;
+        }
+        .base-tag {
+            font-size: 11px;
+            padding: 1px 8px;
+            border-radius: 10px;
+            background: #f0f0f0;
+            color: #666;
+        }
+        .base-tag.river-tag { background: #e1f5ee; color: #0f6e56; }
+        .base-tag.jialing-tag { background: #e6f1fb; color: #185fa5; }
+        .base-tag.wujiang-tag { background: #f0e6f6; color: #6b2f8a; }
+        .base-tag.fujiang-tag { background: #fef3d6; color: #854f0b; }
+        .base-location {
+            font-size: 12px;
+            color: #888;
+            line-height: 1.5;
+        }
+        .base-location .loc-icon { margin-right: 3px; }
+        /* 空状态 */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #999;
+            display: none;
+        }
+        .empty-state .empty-icon { font-size: 48px; margin-bottom: 12px; opacity: 0.4; }
+        .empty-state p { font-size: 14px; }
+        /* 底部 */
+        .footer {
+            text-align: center;
+            padding: 24px 16px;
+            color: #bbb;
+            font-size: 12px;
+            line-height: 1.8;
+        }
+        .footer a { color: #1a3a5c; text-decoration: none; }
+        /* 数据更新提示 */
+        .update-notice {
+            margin: 12px 16px;
+            padding: 10px 14px;
+            background: #fef9e7;
+            border-left: 4px solid #c9a227;
+            border-radius: 6px;
+            font-size: 13px;
+            color: #666;
+        }
+        /* 卡片点击弹窗 */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.4);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .modal-overlay.show { display: flex; }
+        .modal-content {
+            background: #fff;
+            border-radius: 16px;
+            padding: 24px;
+            max-width: 400px;
+            width: 100%;
+            position: relative;
+            animation: modalIn 0.2s ease;
+        }
+        @keyframes modalIn { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        .modal-close {
+            position: absolute;
+            top: 12px; right: 16px;
+            font-size: 22px;
+            color: #999;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 4px 8px;
+        }
+        .modal-title { font-size: 20px; font-weight: 700; color: #1a3a5c; margin-bottom: 16px; padding-right: 30px; }
+        .modal-info { margin-bottom: 8px; font-size: 14px; color: #555; line-height: 1.7; }
+        .modal-info strong { color: #333; }
+        /* 导航按钮 */
+        .nav-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 16px;
+            padding: 12px 20px;
+            background: linear-gradient(135deg, #1677ff, #0958d9);
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            justify-content: center;
+            transition: opacity 0.2s;
+            text-decoration: none;
+        }
+        .nav-btn:active { opacity: 0.8; }
+        /* 区县下拉筛选行 */
+        .filter-row {
+            display: flex;
+            gap: 8px;
+            padding: 4px 16px 12px;
+            align-items: center;
+        }
+        .filter-row select {
+            flex: 1;
+            padding: 8px 12px;
+            border: 1.5px solid #ddd;
+            border-radius: 10px;
+            font-size: 14px;
+            color: #333;
+            background: #fff;
+            outline: none;
+            appearance: auto;
+            -webkit-appearance: auto;
+        }
+        .filter-row select:focus { border-color: #1a3a5c; }
+        /* 区县下拉重置按钮 */
+        .filter-reset {
+            padding: 8px 14px;
+            border: 1.5px solid #ddd;
+            border-radius: 10px;
+            font-size: 13px;
+            color: #666;
+            background: #fff;
+            cursor: pointer;
+            white-space: nowrap;
+            user-select: none;
+        }
+        .filter-reset:active { background: #f0f0f0; }
+    </style>
+</head>
+<body>
+
+<!-- 头部 -->
+<div class="header">
+    <h1>🏊 重庆冬泳基地导航</h1>
+    <p>重庆市冬泳协会 · 会员单位公开水域游泳点</p>
+    <div class="count-badge">📌 已收录 <span id="totalCount">0</span> 个基地</div>
+</div>
+
+<!-- 搜索栏 -->
+<div class="search-bar">
+    <span class="search-icon">🔍</span>
+    <input type="text" id="searchInput" placeholder="搜索基地名称、区县或水域..." oninput="filterBases()">
+</div>
+
+<!-- 筛选标签（水域） -->
+<div class="filters" id="filterTags">
+    <span class="filter-tag active" data-filter="all" onclick="setFilter('all', this)">🌊 全部</span>
+    <span class="filter-tag" data-filter="river" onclick="setFilter('river', this)">🏞️ 长江</span>
+    <span class="filter-tag" data-filter="jialing" onclick="setFilter('jialing', this)">🌉 嘉陵江</span>
+    <span class="filter-tag" data-filter="wujiang" onclick="setFilter('wujiang', this)">🌌 乌江</span>
+    <span class="filter-tag" data-filter="fujiang" onclick="setFilter('fujiang', this)">🌅 涪江</span>
+</div>
+
+<!-- 区县下拉筛选 -->
+<div class="filter-row" id="districtFilterRow">
+    <select id="districtSelect" onchange="setDistrict(this.value)">
+        <option value="">🏘️ 全部区县</option>
+    </select>
+    <button class="filter-reset" onclick="resetDistrictFilter()">重置</button>
+</div>
+
+<!-- 数据更新提示 -->
+<div class="update-notice">
+    📝 数据持续更新中 · 各分队负责人可联系协会提交/修改基地信息 · 仅收录协会会员单位所属公开水域
+</div>
+
+<!-- 基地列表容器 -->
+<div id="baseList"></div>
+
+<!-- 空状态 -->
+<div class="empty-state" id="emptyState">
+    <div class="empty-icon">🔍</div>
+    <p>没有找到匹配的基地</p>
+</div>
+
+<!-- 详情弹窗 -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+    <div class="modal-content" id="modalContent">
+        <button class="modal-close" onclick="closeModal()">✕</button>
+        <div class="modal-title" id="modalTitle"></div>
+        <div id="modalBody"></div>
+    </div>
+</div>
+
+<!-- 底部 -->
+<div class="footer">
+    重庆市冬泳协会 · 重庆冬泳公众号<br>
+    <a href="https://mp.weixin.qq.com/s/NLaRhBgVG9lDrRglq835EQ">协会简介</a> · 数据来源：腾讯文档在线协作<br>
+    <span id="updateDate">更新日期：2026-05-27</span>
+</div>
+
+<script>
+// ==================== 基地数据（完整后备数据 + 在线加载） ====================
+// 完整40条基地数据（内嵌后备，确保 file:// 协议下也能正常显示）
+const FALLBACK_DATA = [
+    { id: 1, name: "大鱼海棠分队基地", district: "南岸区", water: "river", icon: "🐟", time: "清晨 6:00-8:00", location: "南滨路大鱼海棠公园下方江段", desc: "南岸区君港水上救援队大鱼海棠分队驻地，夏季有义务巡防值守，南滨路沿线热门下水点。" },
+    { id: 2, name: "铜元局分队基地", district: "南岸区", water: "river", icon: "🌙", time: "清晨 6:00-8:00", location: "铜元局码头下游约200米", desc: "南岸区君港水上救援队铜元局分队驻地，江岸平缓，适合下水。" },
+    { id: 3, name: "海棠溪分队基地", district: "南岸区", water: "river", icon: "🌸", time: "清晨 6:00-8:00", location: "海棠溪江段（烟雨路下方）", desc: "南岸区君港水上救援队海棠溪分队驻地。" },
+    { id: 4, name: "长嘉汇分队基地", district: "南岸区", water: "river", icon: "🏛️", time: "清晨 6:00-8:00", location: "长嘉汇购物公园下方江段", desc: "南岸区君港水上救援队长嘉汇分队驻地，两江交汇处附近，可眺望朝天门。" },
+    { id: 5, name: "百步梯分队基地", district: "南岸区", water: "river", icon: "🪜", time: "清晨 6:00-8:00", location: "百步梯江段", desc: "南岸区君港水上救援队百步梯分队驻地。" },
+    { id: 6, name: "峡口分队基地", district: "南岸区", water: "river", icon: "🌉", time: "清晨 6:00-8:00", location: "峡口镇江段", desc: "南岸区君港水上救援队峡口分队驻地，位于南岸区下游。" },
+    { id: 7, name: "军港码头冬泳点", district: "南岸区", water: "river", icon: "⚓", time: "清晨 6:00-8:00", location: "南滨路军港码头", desc: "南滨路经典下水点，泳友聚集地。" },
+    { id: 8, name: "曾家岩大石头基地", district: "渝中区", water: "jialing", icon: "🪨", time: "清晨 6:00-9:00", location: "曾家岩大桥下方大石头处", desc: "嘉陵江沿岸经典冬泳点，大石头处为知名泳友聚集地。" },
+    { id: 9, name: "纱帽石冬泳基地", district: "渝中区", water: "jialing", icon: "🧢", time: "清晨 6:00-8:30", location: "嘉陵江牛角沱轻轨站下方", desc: "嘉陵江牛角沱段，纱帽石为标志性地标。" },
+    { id: 10, name: "鎏嘉码头冬泳队基地", district: "渝中区", water: "jialing", icon: "⚓", time: "清晨 6:00-8:30", location: "鎏嘉码头下方江段", desc: "嘉陵江鎏嘉码头段，泳友自发形成的水上活动点。" },
+    { id: 11, name: "大溪沟冬泳基地", district: "渝中区", water: "jialing", icon: "🏘️", time: "清晨 6:00-8:30", location: "大溪沟嘉陵江段", desc: "大溪沟嘉陵江畔，传统下水点之一。" },
+    { id: 12, name: "李子坝冬泳基地", district: "渝中区", water: "jialing", icon: "🚇", time: "清晨 6:00-9:00", location: "李子坝轻轨站下方江段", desc: "嘉陵江李子坝段，与网红轻轨穿楼同一江段。" },
+    { id: 13, name: "朝天门大剧院游泳点", district: "渝中区", water: "river", icon: "🎭", time: "清晨 6:00-8:00", location: "重庆大剧院下方江段", desc: "两江交汇处附近，长江与嘉陵江汇合点，江面开阔。" },
+    { id: 14, name: "石门冬泳跳水队基地", district: "江北区", water: "jialing", icon: "🏗️", time: "清晨 6:00-9:00", location: "石门大桥下方江段", desc: "石门大桥下游，以冬泳跳水为特色，嘉陵江经典下水点。" },
+    { id: 15, name: "鸭脚板冬泳基地", district: "江北区", water: "jialing", icon: "🦆", time: "清晨 6:00-8:30", location: "华新街嘉陵江大桥桥东", desc: "嘉陵江北岸知名冬泳点，泳友聚集地。" },
+    { id: 16, name: "刘家台冬泳基地", district: "江北区", water: "jialing", icon: "🏠", time: "清晨 6:00-8:30", location: "刘家台嘉陵江段", desc: "嘉陵江北岸刘家台，传统下水点。" },
+    { id: 17, name: "猫儿石冬泳队基地", district: "江北区", water: "jialing", icon: "🐱", time: "清晨 6:00-8:30", location: "北滨路猫儿石段", desc: "北滨路沿线猫儿石，北国风光河边冬泳点。" },
+    { id: 18, name: "郭家沱望江游泳基地", district: "江北区", water: "river", icon: "🌊", time: "清晨 6:00-8:00", location: "江北区郭家沱", desc: "长江郭家沱段，望江厂附近，长江下游方向经典下水点。" },
+    { id: 19, name: "鹅公岩回水沱冬泳场", district: "九龙坡区", water: "river", icon: "🦢", time: "清晨 6:00-8:00", location: "鹅公岩大桥附近回水沱", desc: "鹅公岩大桥下回水沱，长江南岸段，水流相对平缓。" },
+    { id: 20, name: "九龙滩冬泳基地", district: "九龙坡区", water: "river", icon: "🐉", time: "清晨 6:00-8:00", location: "杨家坪九龙滩", desc: "长江九龙坡段，九龙滩为传统冬泳点，泳友聚集。" },
+    { id: 21, name: "石门大桥沙坪坝侧基地", district: "沙坪坝区", water: "jialing", icon: "🌉", time: "清晨 6:00-9:00", location: "石门大桥沙坪坝侧下方江段", desc: "石门大桥嘉陵江南岸沙坪坝侧，与江北石门冬泳队隔江相望。" },
+    { id: 22, name: "正码头冬泳基地（碚石）", district: "北碚区", water: "jialing", icon: "⛵", time: "清晨 6:00-9:00", location: "北碚城区正码头碚石嘉陵江段", desc: "北碚区最经典的冬泳点，碚石为标志性下水位置，泳友众多。" },
+    { id: 23, name: "温塘峡冬泳基地", district: "北碚区", water: "jialing", icon: "♨️", time: "清晨 6:00-9:00", location: "北碚嘉陵江温塘峡四号门→野温泉", desc: "嘉陵江温塘峡段，下水后顺流可至野温泉，风景优美。" },
+    { id: 24, name: "义渡古镇冬泳基地", district: "大渡口区", water: "river", icon: "🌅", time: "清晨 6:00-8:00", location: "大渡口区义渡古镇下方江段", desc: "长江大渡口段，义渡古镇下方江面开阔，适合冬泳。" },
+    { id: 25, name: "巴南长江游泳点", district: "巴南区", water: "river", icon: "🌊", time: "清晨 6:00-8:00", location: "巴南区鱼洞长江段", desc: "长江巴南段，鱼洞附近下水点。" },
+    { id: 26, name: "文峰古街游泳点", district: "合川区", water: "jialing", icon: "🏛️", time: "清晨 6:00-8:30", location: "合川文峰古街嘉陵江段", desc: "合川文峰古街下方江段，三江交汇区域。" },
+    { id: 27, name: "东渡大桥游泳点", district: "合川区", water: "jialing", icon: "🌉", time: "清晨 6:00-8:30", location: "合川东渡大桥茶楼下方", desc: "东渡大桥下，合川泳友聚集地。" },
+    { id: 28, name: "涪江合川段游泳点", district: "合川区", water: "fujiang", icon: "🌅", time: "清晨 6:00-8:30", location: "合川涪江段（江润/南屏桥附近）", desc: "涪江合川段，江润、南屏桥加油站、八角亭、花滩等均有下水点。" },
+    { id: 29, name: "乌江游泳基地", district: "涪陵区", water: "wujiang", icon: "🌌", time: "清晨 6:00-9:00", location: "涪陵区乌江段（近长江交汇处）", desc: "涪陵乌江段经典冬泳基地，每日上百人下水，水质清澈。" },
+    { id: 30, name: "涪陵长江游泳点", district: "涪陵区", water: "river", icon: "🚢", time: "清晨 6:00-8:00", location: "涪陵城区长江段", desc: "长江涪陵段，两江交汇城市。" },
+    { id: 31, name: "武隆乌江冬泳基地", district: "武隆区", water: "wujiang", icon: "🏔️", time: "清晨 7:00-9:00", location: "武隆城区乌江段", desc: "武隆乌江段，固定冬泳群体超过500人。水质极佳，两岸山水如画。" },
+    { id: 32, name: "彭水乌江冬泳点", district: "彭水县", water: "wujiang", icon: "🎭", time: "清晨 7:00-9:00", location: "彭水县城乌江段", desc: "乌江彭水段，每年举办水上运动大赛，水质优良。" },
+    { id: 33, name: "龚滩古镇乌江游泳点", district: "酉阳县", water: "wujiang", icon: "🏘️", time: "清晨 7:00-9:00", location: "酉阳县龚滩古镇乌江段", desc: "乌江龚滩古镇段，古镇依山傍水，江水清澈，风景绝佳。" },
+    { id: 34, name: "潼南涪江冬泳基地", district: "潼南区", water: "fujiang", icon: "🌅", time: "清晨 6:30-9:00", location: "潼南涪江国家湿地公园段", desc: "涪江潼南段，涪江国家湿地公园下水点，潼南区游泳协会驻地。" },
+    { id: 35, name: "大佛寺涪江亲水点", district: "潼南区", water: "fujiang", icon: "🏯", time: "清晨 6:30-9:00", location: "潼南大佛寺涪江水域", desc: "潼南大佛寺下方涪江段。" },
+    { id: 36, name: "安居古城涪江冬泳点", district: "铜梁区", water: "fujiang", icon: "🏰", time: "清晨 6:30-9:00", location: "铜梁安居古城下方涪江段", desc: "涪江铜梁安居古城段，每年举办跨区域冬泳联谊活动。" },
+    { id: 37, name: "三峡之星体育馆码头", district: "万州区", water: "river", icon: "🏊", time: "清晨 6:00-8:00", location: "万州三峡之星体育馆下方长江段", desc: "长江万州段，三峡之星体育馆为标志性下水点。" },
+    { id: 38, name: "调节坝游泳基地", district: "开州区", water: "river", icon: "🌊", time: "清晨 6:00-8:00", location: "开州区调节坝", desc: "开州调节坝水域，开州区游泳爱好者聚集地。" },
+    { id: 39, name: "璧山区游泳协会基地", district: "璧山区", water: "river", icon: "🏞️", time: "清晨 6:30-8:30", location: "璧山区（水库/河流水域）", desc: "璧山区游泳协会驻地，包括王家沟水库等下水点。" },
+    { id: 40, name: "黔江弯塘冬泳基地", district: "黔江区", water: "river", icon: "🏞️", time: "清晨 7:00-9:00", location: "黔江区弯塘", desc: "黔江弯塘，渝东南泳友聚集地。" }
+];
+let BASE_DATA = FALLBACK_DATA; // 先用后备数据确保立即显示
+
+// COS部署地址（在线部署时从此加载）
+// 静态网站地址（优先）和原始 COS 地址（后备）
+const COS_DATA_URL = 'https://dongyong-wx-1417241299.cos-website.ap-chongqing.myqcloud.com/base-map/base_data.json';
+const COS_DATA_FALLBACK_URL = 'https://dongyong-wx-1417241299.cos.ap-chongqing.myqcloud.com/base-map/base_data.json';
+
+function loadOnlineData() {
+    // 尝试通过fetch加载外部JSON（在线部署时使用）
+    fetch(COS_DATA_URL)
+        .then(res => {
+            if (!res.ok) throw new Error('HTTP ' + res.status);
+            return res.json();
+        })
+        .then(data => {
+            if (data && data.bases && data.bases.length > 0) {
+                BASE_DATA = data.bases;
+                if (data.updated) {
+                    document.getElementById('updateDate').textContent = '更新日期：' + data.updated;
+                }
+                buildDistrictOptions(); // 重建区县下拉
+                renderBases();
+            }
+        })
+        .catch(err => {
+            console.log('静态网站地址加载失败，尝试原始COS地址...');
+            fetch(COS_DATA_FALLBACK_URL)
+                .then(res => res.ok ? res.json() : Promise.reject())
+                .then(data => {
+                    if (data && data.bases && data.bases.length > 0) {
+                        BASE_DATA = data.bases;
+                        if (data.updated) {
+                            document.getElementById('updateDate').textContent = '更新日期：' + data.updated;
+                        }
+                        buildDistrictOptions();
+                        renderBases();
+                    }
+                })
+                .catch(err2 => {
+                    console.log('在线数据未加载，使用内嵌后备数据 (' + BASE_DATA.length + ' 条)');
+                });
+        });
+}
+
+// ==================== 渲染逻辑 ====================
+
+let currentFilter = "all";
+let currentDistrict = "";
+let currentSearch = "";
+
+function getIconBg(water) {
+    const map = { river: "river", jialing: "jialing", wujiang: "wujiang", fujiang: "fujiang" };
+    return map[water] || "river";
+}
+
+function getWaterLabel(water) {
+    const map = { river: "长江", jialing: "嘉陵江", wujiang: "乌江", fujiang: "涪江" };
+    return map[water] || "其他";
+}
+
+function getWaterTagClass(water) {
+    return water + "-tag";
+}
+
+function filterBases() {
+    currentSearch = document.getElementById("searchInput").value.trim().toLowerCase();
+    renderBases();
+}
+
+function setFilter(filter, el) {
+    currentFilter = filter;
+    document.querySelectorAll(".filter-tag").forEach(t => t.classList.remove("active"));
+    el.classList.add("active");
+    renderBases();
+}
+
+function setDistrict(district) {
+    currentDistrict = district;
+    renderBases();
+}
+
+function resetDistrictFilter() {
+    currentDistrict = "";
+    document.getElementById("districtSelect").value = "";
+    renderBases();
+}
+
+function buildDistrictOptions() {
+    // 从数据中提取所有区县，去重排序
+    const districts = [...new Set(BASE_DATA.map(b => b.district))].sort();
+    const select = document.getElementById("districtSelect");
+    // 保留第一个 "全部区县" 选项
+    while (select.options.length > 1) select.remove(1);
+    districts.forEach(d => {
+        const opt = document.createElement("option");
+        opt.value = d;
+        opt.textContent = d + " (" + BASE_DATA.filter(b => b.district === d).length + "个)";
+        select.appendChild(opt);
+    });
+    console.log('区县下拉已构建: ' + districts.length + ' 个区县');
+}
+
+function renderBases() {
+    // 筛选数据
+    let filtered = BASE_DATA.filter(b => {
+        if (currentFilter !== "all" && b.water !== currentFilter) return false;
+        if (currentDistrict && b.district !== currentDistrict) return false;
+        if (currentSearch) {
+            const searchText = (b.name + b.district + getWaterLabel(b.water) + b.location).toLowerCase();
+            if (!searchText.includes(currentSearch)) return false;
+        }
+        return true;
+    });
+
+    // 按区县分组
+    const groups = {};
+    filtered.forEach(b => {
+        if (!groups[b.district]) groups[b.district] = [];
+        groups[b.district].push(b);
+    });
+
+    // 更新总数
+    document.getElementById("totalCount").textContent = BASE_DATA.length;
+
+    // 渲染
+    const container = document.getElementById("baseList");
+    const emptyState = document.getElementById("emptyState");
+
+    if (Object.keys(groups).length === 0) {
+        container.innerHTML = "";
+        emptyState.style.display = "block";
+        return;
+    }
+    emptyState.style.display = "none";
+
+    let html = "";
+    const districtOrder = Object.keys(groups).sort();
+    districtOrder.forEach(district => {
+        const bases = groups[district];
+        // 统计水域分布
+        const waterCounts = {};
+        bases.forEach(b => {
+            const label = getWaterLabel(b.water);
+            waterCounts[label] = (waterCounts[label] || 0) + 1;
+        });
+        const metaStr = Object.entries(waterCounts).map(([k,v]) => `${k} ${v}个`).join(" · ");
+
+        html += `<div class="district-group">`;
+        html += `<div class="district-header">`;
+        html += `<span class="district-name">${district}</span>`;
+        html += `<span class="district-meta">${metaStr}</span>`;
+        html += `</div>`;
+
+        bases.forEach(b => {
+            html += `<div class="base-card" onclick="showDetail(${b.id})">`;
+            html += `<div class="base-icon ${getIconBg(b.water)}">${b.icon}</div>`;
+            html += `<div class="base-info">`;
+            html += `<div class="base-name">${b.name}</div>`;
+            html += `<div class="base-tags">`;
+            html += `<span class="base-tag ${getWaterTagClass(b.water)}">${getWaterLabel(b.water)}</span>`;
+            html += `<span class="base-tag">⏰ ${b.time}</span>`;
+            html += `</div>`;
+            html += `<div class="base-location"><span class="loc-icon">📍</span>${b.location}</div>`;
+            html += `</div>`;
+            html += `<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;flex-shrink:0;gap:4px;" onclick="event.stopPropagation();openAmap('${encodeURI(b.name + ' ' + b.location)}')">`;
+            html += `<div style="font-size:20px;">🗺️</div>`;
+            html += `<div style="font-size:10px;color:#1677ff;font-weight:600;">导航</div>`;
+            html += `</div>`;
+            html += `</div>`;
+        });
+
+        html += `</div>`;
+    });
+
+    container.innerHTML = html;
+}
+
+// ==================== 详情弹窗 ====================
+
+function showDetail(id) {
+    const b = BASE_DATA.find(item => item.id === id);
+    if (!b) return;
+
+    document.getElementById("modalTitle").textContent = b.icon + " " + b.name;
+
+    let bodyHtml = "";
+    bodyHtml += `<div class="modal-info"><strong>📍 位置：</strong>${b.location}</div>`;
+    bodyHtml += `<div class="modal-info"><strong>🌊 水域：</strong>${getWaterLabel(b.water)}</div>`;
+    bodyHtml += `<div class="modal-info"><strong>⏰ 活跃时间：</strong>${b.time}</div>`;
+    bodyHtml += `<div class="modal-info"><strong>🏘️ 所属区县：</strong>${b.district}</div>`;
+    if (b.desc) {
+        bodyHtml += `<div class="modal-info" style="margin-top:12px;padding-top:12px;border-top:1px solid #eee;"><strong>📝 简介：</strong><br>${b.desc}</div>`;
+    }
+    // 高德一键导航按钮
+    const searchKeyword = encodeURIComponent(b.name + ' ' + b.location);
+    bodyHtml += `<a class="nav-btn" href="https://uri.amap.com/marker?position=&name=${searchKeyword}&src=冬泳基地导航&callnative=1" target="_blank" rel="noopener">`;
+    bodyHtml += `🗺️ 高德地图 · 一键导航</a>`;
+    document.getElementById("modalBody").innerHTML = bodyHtml;
+
+    document.getElementById("modalOverlay").classList.add("show");
+}
+
+function closeModal(e) {
+    if (e && e.target !== document.getElementById("modalOverlay")) return;
+    document.getElementById("modalOverlay").classList.remove("show");
+}
+
+// ==================== 高德一键导航 ====================
+function openAmap(keyword) {
+    // 使用高德地图搜索API，打开高德App/网页导航
+    const url = 'https://uri.amap.com/search?key=' + keyword + '&src=冬泳基地导航&callnative=1';
+    window.open(url, '_blank');
+}
+
+// ==================== 初始化 ====================
+// 先用后备数据立即渲染，再异步尝试加载在线数据
+buildDistrictOptions();
+renderBases();
+loadOnlineData();
+</script>
+
+</body>
+</html>
